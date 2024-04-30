@@ -4,8 +4,13 @@ import customtkinter as ctk
 import ttkbootstrap as btk
 from tkinter import filedialog
 
+# Importing the scrapping file : Scrapper calss 
+import selenium_scrapper
 
 
+# Importing the threading pool : 
+from multiprocessing.pool import ThreadPool
+import concurrent.futures
 
 def load_file():
     filename  =filedialog.askopenfilename()
