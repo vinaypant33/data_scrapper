@@ -13,19 +13,22 @@ duration  = 2000
 
 class selenium_driver():
 
-    def __init__(self , current_roll_number , sleep  ) -> None:
+    def __init__(self , current_roll_number  , sleep  ) -> None:
+        print("Class Loading")
         self.frequency  = 2000
         self.duration  = 2000
         self.current_roll_numebr  = current_roll_number
         self.registration_number  = "1171530224"
         self.sleep = sleep
+        s
         self.nodes = {'C': 1635,'D': 1835,'E': 2060,'S': 1945,'F': 2183,'G': 2450,'A': 2750,'B': 3087,' ': 37}
 
         self.driver  = webdriver.Firefox()
         # self.driver.maximize_window()
         self.driver.get("https://result.mdurtk.in/postexam/result.aspx")
 
-    def check_rollnumber(self):
+    def check_rollnumber(self ):
+        
         if self.driver.title == "Maharshi Dayanand University, Rohtak":
             self.driver.find_element(By.ID , "txtRegistrationNo").send_keys(str(self.registration_number))
             self.driver.find_element(By.ID , "txtRollNo").send_keys(str(self.current_roll_numebr))
@@ -47,7 +50,7 @@ class selenium_driver():
                 return "not_found"
             sleep(self.sleep)
             self.driver.find_element(By.ID , "imgComfirm").click()
-            with open("success.txt" , 'a') as file : file.write("Successful Rollnumber : " + str(self.current_roll_numebr) + "\n")
+            with open("working_rollnumber.txt" , 'a') as file : file.write("Successful Rollnumber : " + str(self.current_roll_numebr) + "\n")
             return "not_found"
             # This code will be done in another class in the main loop of the tkinter library which will run using the thread pool and / which to be controlled by the slider
             # with open('confirmed_rollnumber.txt', 'a') as file: file.write(each)
@@ -59,5 +62,5 @@ class selenium_driver():
 
 
 if __name__ == '__main__':
-    hehe  = selenium_driver(5434453 , 3)
+    hehe  = selenium_driver(5434453 , 3 , "successful_rollnumer.txt")
     hehe.check_rollnumber()

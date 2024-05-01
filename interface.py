@@ -11,23 +11,91 @@ import selenium_scrapper
 # Importing the threading pool : 
 from multiprocessing.pool import ThreadPool
 import concurrent.futures
+from time import sleep
+
+
+
+## Setting up Constants  : 
+current_working = True
+current_sleep_value = 0 
+current_thread_value  = 0
+loaded_rollnumber  = []
+current_filename  = ""
 
 def load_file():
     filename  =filedialog.askopenfilename()
     selected_file_text.delete( 0 , 100)
     selected_file_text.insert(0 , filename)
-    return filedialog
+    return filename
+
+
 
 def slider_value_func(value):
     borwser_value.configure(text = "Browser Count ( Threads ) : " + str(value))
 
 
+
+
 def sleep_slider_value_func(value):
     sleep_value.configure(text = "Sleep Value: " + str(value))
+
+
 
 def file_saving():
     save_file_dialog  = filedialog.asksaveasfilename()
     save_file_text.insert(0 , save_file_dialog)
+
+
+
+# Function to be called by another function for executing the class :
+def calling_selenium_class(current_roll_number , current_sleepvalue):
+    # current_sleep_value = sleep_slider.get()
+    # save_filename  = save_file_text.get()
+    selenium_scrapper.selenium_driver(current_roll_number=current_roll_number , sleep=current_sleepvalue )
+
+
+
+def printing(value):
+    print(value)
+
+# Main function which will make threadpool : 
+def start_threading():
+
+    current_thread_value = browser_slider.get()
+    print("Starting")
+    # loading the list to the another list and then check the length of the list 
+
+    current_filename = selected_file_text.get()
+    readfile  = open(current_filename , 'r')
+    line  = readfile.readline()
+
+    while True:
+        
+        # Get next line from file
+        line = readfile.readline()
+        # if line is empty
+        # end of file is reached
+        if not line:
+            break
+        loaded_rollnumber.append(line)
+    
+    print("Loading Done")
+
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
+    #     print("Execution Starting")
+    #     future_to_item = {executor.submit(calling_selenium_class, item , sleep_slider.get()): item for item in loaded_rollnumber}
+    #     for future in concurrent.futures.as_completed(future_to_item):
+    #         item = future_to_item[future]
+    #     try:
+    #         result = future.result()
+    #     except Exception as exc:
+    #         print(f"Processing of item {item} generated an exception: {exc}")
+    #     else:
+    #         print(f"Processing of item {item} completed")
+    
+    # By the method of manual thread creation  : 
+
+
 
 # For now going with the file 
 main_window  = ctk.CTk()
@@ -69,7 +137,7 @@ save_file_text  = ctk.CTkEntry(main_window , placeholder_text="Enter File to Sav
 
 # Make start and stop buttons : 
 
-start_scrapping  = ctk.CTkButton(main_window , text="Start Scrapping" , width=255)
+start_scrapping  = ctk.CTkButton(main_window , text="Start Scrapping" , width=255 , command=start_threading)
 stop_scrapping  = ctk.CTkButton(main_window , text="Stop Scrapping" , width  = 255)
 
 

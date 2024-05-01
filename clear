@@ -1,0 +1,29 @@
+[33mcommit 0ae83c419d09ccbe0fa91b10fc0bc6026944504c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Vinay Pant <vinaypant24@gmail.com>
+Date:   Tue Apr 30 07:52:27 2024 +0530
+
+    scrapper file done
+
+[33mcommit b932c695c3dad7bc9ac8af63a882be8a8d2f52ca[m
+Author: Vinay Pant <vinaypant24@gmail.com>
+Date:   Mon Apr 29 22:42:58 2024 +0530
+
+    scrapper class - skeleton code
+
+[33mcommit 3f65985bd830bec2cad34681b3c1f5a9b24b5275[m
+Author: Vinay Pant <vinaypant24@gmail.com>
+Date:   Mon Apr 29 21:37:55 2024 +0530
+
+    UI completed using custom tkitner
+
+[33mcommit 4152e663b9bc82ef2b94f875a50037274a58ebbb[m
+Author: Vinay Pant <vinaypant24@gmail.com>
+Date:   Mon Apr 29 11:51:12 2024 +0530
+
+    Skeleton Code
+
+[33mcommit 03b6cc4f80514caff9bce8fbc0fef76e134b1ddf[m
+Author: Vinay Pant <vinaypant24@gmail.com>
+Date:   Mon Apr 29 11:44:32 2024 +0530
+
+    Initial commit
