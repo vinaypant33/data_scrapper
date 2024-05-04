@@ -19,6 +19,8 @@ current_thread_value  = 1
 loaded_rollnumber  = []
 current_filename  = ""
 
+
+save_file_name = ""
 stop_event  = threading.Event() # Will be used for the stop event of the threads 
 lock  = threading.Lock() # Will be used for the locking of the threads
 threads = []
@@ -41,7 +43,7 @@ def sleep_slider_value_func(value):
 
 
 def file_saving():
-    save_file_dialog  = filedialog.asksaveasfilename()
+    save_file_dialog  = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
     save_file_text.insert(0 , save_file_dialog)
 
 
@@ -66,12 +68,15 @@ def file_loading():
 
 
 def scrapper_selenium(roll_number , sleep):
-
+    global save_file_name 
+    save_file_name = save_file_text.get()
     global current_count
     current_count+= 1
-    print(current_count)
     scrapper = selenium_scrapper.selenium_driver(current_roll_number=roll_number , sleep=sleep)
     scrapper.check_rollnumber()
+    if current_count == 100:
+        for roll_number in loaded_rollnumber:
+            with open(save_file_name , 'a') as file : file.write(roll_number + "\n")
  
 
 
@@ -84,55 +89,20 @@ def second_thread_calling():
 
 
 
-
-
 def thread_calling():
     file_loading() # File Loading for the roll number 
     global current_thread_value
     global sleep_value
 
     sleep_value = int(sleep_slider.get())
-
-    print("Loaded Roll Number : " + str(len(loaded_rollnumber)))
     current_thread_value = int(browser_slider.get())
-    print("Threads : " + str(current_thread_value))
-    
 
-    # for i in range(current_thread_value):
-    #         current_rollnumber  = loaded_rollnumber.pop(0)
-    #         # print("current rollnumber : " + str(current_rollnumber))
-    #         # print("Current rollnumber count : " + str(len(loaded_rollnumber)))
-    #         thread  = threading.Thread(target=scrapper_selenium , args=(current_rollnumber ,  sleep_value))
-    #         thread.start()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
+        futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(current_thread_value)]
+            # Wait for all futures to complete
+        for future in concurrent.futures.as_completed(futures):
+            print("All threads are completed")
 
-    #         threads.append(thread)
-
-    #         while True:
-    #             alive_threads  = sum(1 for thread in threads if thread.is_alive())
-    #             if alive_threads == 0:
-    #                 print("Thread Count is Completed")
-    #                 # break
-    #                 # Setting up the thread 
-    #                 second_thread_calling() # Calling the thread again and making a beep for the 
-    #             else:
-    #                 pass
-
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
-    #     current_rollnumber  = loaded_rollnumber.pop(0)
-    #     futures = [executor.submit(scrapper_selenium, current_rollnumber , sleep_value) for i in range(current_thread_value)]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         print("All threads are completed")
-
-    executor = concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value)
-
-
-    futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(5)]
-        # Wait for all futures to complete
-    for future in concurrent.futures.as_completed(futures):
-        print("All threads are completed")
-
-    # Close the executor manually
-    executor.shutdown()
 
         
 
@@ -170,7 +140,7 @@ sleep_slider =ctk.CTkSlider(main_window , from_= 1 , to=10 , number_of_steps=9, 
 
 # Saving the file : in text file after 200 iterations  : 
 save_file_button = ctk.CTkButton(main_window , text="Save File" , command=file_saving)
-save_file_text  = ctk.CTkEntry(main_window , placeholder_text="Enter File to Save Password" , width=380)
+save_file_text  = ctk.CTkEntry(main_window , placeholder_text="Enter Filename to Save Password" , width=380)
 
 
 # Make start and stop buttons : 

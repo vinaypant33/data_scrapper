@@ -43,11 +43,10 @@ class selenium_driver():
                 email_id_confirmation.send_keys("vinaypant24@gmail.com")
                 confirm_click.click()
             except:
-                print("Mobile Number and Emalil id not found")
                 self.driver.close()
                 self.driver.quit()
-                with open("data_scrapper_log.txt" , 'a') as file : file.write("Mobile Number and Email ID not found for roll number :" + str(self.current_roll_numebr) + "\n")
-                return "not_found"
+                with open("data_scrapper_log.txt" , 'a') as file : file.write("Mobile Number and Email ID not found for roll number :" + str(self.current_roll_numebr))
+                return "Result Not Found"
             sleep(self.sleep)
             self.driver.find_element(By.ID , "imgComfirm").click()
             with open("working_rollnumber.txt" , 'a') as file : file.write("Successful Rollnumber : " + str(self.current_roll_numebr) + "\n")
