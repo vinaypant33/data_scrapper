@@ -51,7 +51,8 @@ def file_saving():
 ###### THREAD FUNCTIONS ############
 
 def file_loading():
-    print("File Reading")
+    
+    status_bar.configure(text="File Reading")
     current_filename = selected_file_text.get()
     readfile  = open(current_filename , 'r')
     line  = readfile.readline()
