@@ -7,7 +7,7 @@ import selenium_scrapper
 import threading 
 from time import sleep
 import winsound
-
+import concurrent.futures # For threadpool 
 from tkinter import messagebox
 
 
@@ -66,46 +66,29 @@ def file_loading():
 
 
 def scrapper_selenium(roll_number , sleep):
+
+    global current_count
+    current_count+= 1
+    print(current_count)
     scrapper = selenium_scrapper.selenium_driver(current_roll_number=roll_number , sleep=sleep)
     scrapper.check_rollnumber()
  
 
 
 def second_thread_calling():
+    global current_thread_value
+    global sleep_value
     current_thread_value = int(browser_slider.get())
     sleep_value = int(sleep_slider.get())
-    for i in range(current_thread_value):
-            current_rollnumber  = loaded_rollnumber.pop(0)
-            # print("current rollnumber : " + str(current_rollnumber))
-            # print("Current rollnumber count : " + str(len(loaded_rollnumber)))
-            thread  = threading.Thread(target=scrapper_selenium , args=(current_rollnumber , sleep_value ))
-            thread.start() 
-
-            threads.append(thread)
-            messagebox.showinfo("Data Scrapper" , str(len(threads)))
-
-            for thread in threads:
-                thread.join()
-
-           
+    
 
 
-            while True:
-                alive_threads  = sum(1 for thread in threads if thread.is_alive())
-
-                if alive_threads == 0:
-                    print("Thread Count is Completed")
-                    # break
-                    # Setting up the thread 
-                    # second_thread_calling() # Calling the thread again and making a beep for the 
-                else:
-                    pass
 
 
 
 def thread_calling():
     file_loading() # File Loading for the roll number 
-    global current_count
+    global current_thread_value
     global sleep_value
 
     sleep_value = int(sleep_slider.get())
@@ -113,30 +96,45 @@ def thread_calling():
     print("Loaded Roll Number : " + str(len(loaded_rollnumber)))
     current_thread_value = int(browser_slider.get())
     print("Threads : " + str(current_thread_value))
-
-    for i in range(current_thread_value):
-            current_rollnumber  = loaded_rollnumber.pop(0)
-            # print("current rollnumber : " + str(current_rollnumber))
-            # print("Current rollnumber count : " + str(len(loaded_rollnumber)))
-            thread  = threading.Thread(target=scrapper_selenium , args=(current_rollnumber ,  sleep_value))
-            thread.start()
-
-            threads.append(thread)
-
-            while True:
-                alive_threads  = sum(1 for thread in threads if thread.is_alive())
-                if alive_threads == 0:
-                    print("Thread Count is Completed")
-                    # break
-                    # Setting up the thread 
-                    second_thread_calling() # Calling the thread again and making a beep for the 
-                else:
-                    pass
-
-
-
     
 
+    # for i in range(current_thread_value):
+    #         current_rollnumber  = loaded_rollnumber.pop(0)
+    #         # print("current rollnumber : " + str(current_rollnumber))
+    #         # print("Current rollnumber count : " + str(len(loaded_rollnumber)))
+    #         thread  = threading.Thread(target=scrapper_selenium , args=(current_rollnumber ,  sleep_value))
+    #         thread.start()
+
+    #         threads.append(thread)
+
+    #         while True:
+    #             alive_threads  = sum(1 for thread in threads if thread.is_alive())
+    #             if alive_threads == 0:
+    #                 print("Thread Count is Completed")
+    #                 # break
+    #                 # Setting up the thread 
+    #                 second_thread_calling() # Calling the thread again and making a beep for the 
+    #             else:
+    #                 pass
+
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
+    #     current_rollnumber  = loaded_rollnumber.pop(0)
+    #     futures = [executor.submit(scrapper_selenium, current_rollnumber , sleep_value) for i in range(current_thread_value)]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         print("All threads are completed")
+
+    executor = concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value)
+
+
+    futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(5)]
+        # Wait for all futures to complete
+    for future in concurrent.futures.as_completed(futures):
+        print("All threads are completed")
+
+    # Close the executor manually
+    executor.shutdown()
+
+        
 
 ####### MAIN WINDOW #################
 
