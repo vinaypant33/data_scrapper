@@ -13,14 +13,12 @@ duration  = 2000
 
 class selenium_driver():
 
-    def __init__(self , current_roll_number  , sleep  ) -> None:
-        print("Class Loading")
+    def __init__(self , current_roll_number  , sleep ) -> None:
         self.frequency  = 2000
         self.duration  = 2000
         self.current_roll_numebr  = current_roll_number
         self.registration_number  = "1171530224"
         self.sleep = sleep
-        s
         self.nodes = {'C': 1635,'D': 1835,'E': 2060,'S': 1945,'F': 2183,'G': 2450,'A': 2750,'B': 3087,' ': 37}
 
         self.driver  = webdriver.Firefox()
@@ -28,7 +26,7 @@ class selenium_driver():
         self.driver.get("https://result.mdurtk.in/postexam/result.aspx")
 
     def check_rollnumber(self ):
-        
+        print("Checking the roll number with "  + str(self.current_roll_numebr))
         if self.driver.title == "Maharshi Dayanand University, Rohtak":
             self.driver.find_element(By.ID , "txtRegistrationNo").send_keys(str(self.registration_number))
             self.driver.find_element(By.ID , "txtRollNo").send_keys(str(self.current_roll_numebr))
@@ -46,21 +44,27 @@ class selenium_driver():
                 confirm_click.click()
             except:
                 print("Mobile Number and Emalil id not found")
+                self.driver.close()
+                self.driver.quit()
                 with open("data_scrapper_log.txt" , 'a') as file : file.write("Mobile Number and Email ID not found for roll number :" + str(self.current_roll_numebr) + "\n")
                 return "not_found"
             sleep(self.sleep)
             self.driver.find_element(By.ID , "imgComfirm").click()
             with open("working_rollnumber.txt" , 'a') as file : file.write("Successful Rollnumber : " + str(self.current_roll_numebr) + "\n")
-            return "not_found"
+            winsound.Beep(2000 , self.duration)
+            return "Working Roll Number Found"
+
             # This code will be done in another class in the main loop of the tkinter library which will run using the thread pool and / which to be controlled by the slider
             # with open('confirmed_rollnumber.txt', 'a') as file: file.write(each)
         else:
             winsound.Beep(self.nodes['C'] , self.duration)
             print( "Title Not Found Aborting Borwser")
-            self.driver.quit()
+        self.driver.close()
+        self.driver.quit()
+        print("Quitting the browser")
         
 
 
 if __name__ == '__main__':
-    hehe  = selenium_driver(5434453 , 3 , "successful_rollnumer.txt")
+    hehe  = selenium_driver(5434453 , 3 )
     hehe.check_rollnumber()
