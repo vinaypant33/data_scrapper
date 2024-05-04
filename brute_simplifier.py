@@ -19,8 +19,8 @@ while True:
         # end of file is reached
         if not line:
             break
-        if line.strip().startswith('2') or line.strip().startswith('5'):
-            with open('final_one.txt', 'a') as file: file.write( line )
+        if line.strip().startswith('4'):
+            with open('4.txt', 'a') as file: file.write( line )
     pass
     
 

@@ -48,7 +48,6 @@ def file_saving():
     save_file_text.insert(0 , save_file_dialog)
 
 
-
 ###### THREAD FUNCTIONS ############
 
 def file_loading():
@@ -110,7 +109,7 @@ def second_thread_calling():
             total_futures -= 1
             if total_futures == 0:
                 second_thread_calling()
-    
+
 
 
 
@@ -131,12 +130,13 @@ def thread_calling():
 
     # Calculating the currnet executing time for finding the rollnumber : 
     global loaded_rollnumber
-
-    print("File checked for Browser :  Total Count is : ")
-    print(len(loaded_rollnumber))
-    print("Expected time to complete : " +  str((len(loaded_rollnumber) / 6) / current_thread_value) + " Minutes")
-    print("Expected time to complete : " +  str((len(loaded_rollnumber) / 360) / current_thread_value) + " Hours")
-    print("Expected time to complete : " +  str((len(loaded_rollnumber) / 8640) / current_thread_value) + " Days")
+    
+    messagebox.showinfo("Data Scrapper" , "Expected time to complete at current thread count : " + str((len(loaded_rollnumber) / 8640) / current_thread_value) + " Days")
+    # print("File checked for Browser :  Total Count is : ")
+    # print(len(loaded_rollnumber))
+    # print("Expected time to complete : " +  str((len(loaded_rollnumber) / 6) / current_thread_value) + " Minutes")
+    # print("Expected time to complete : " +  str((len(loaded_rollnumber) / 360) / current_thread_value) + " Hours")
+    # print("Expected time to complete : " +  str((len(loaded_rollnumber) / 8640) / current_thread_value) + " Days")
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
         futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(current_thread_value)]
@@ -176,8 +176,10 @@ width  = 550
 
 # main_window.iconphoto(True , icon_image)
 
-main_window.iconbitmap('icon.ico')
-
+try:
+    main_window.iconbitmap('main_icon.ico')
+except:
+    None
 # main_window.tk.call('wm', 'iconphoto', main_window._w, icon_image)  # Make the icon 
 
 

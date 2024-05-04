@@ -25,6 +25,7 @@ class selenium_driver():
 
         self.driver  = webdriver.Firefox()
         # self.driver.maximize_window()
+        self.driver.minimize_window()
         self.driver.get("https://result.mdurtk.in/postexam/result.aspx")
 
     def check_rollnumber(self ):
@@ -60,8 +61,8 @@ class selenium_driver():
         else:
             winsound.Beep(self.nodes['C'] , self.duration)
             print( "Title Not Found Aborting Borwser")
-        self.driver.close()
-        self.driver.quit()
+            self.driver.close()
+            self.driver.quit()
         
 
 
