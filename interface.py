@@ -68,41 +68,87 @@ def file_loading():
 
 
 def scrapper_selenium(roll_number , sleep):
-    global save_file_name 
-    save_file_name = save_file_text.get()
+    # global save_file_name 
+    # global loaded_rollnumber
+    # save_file_name = save_file_text.get()
     global current_count
     current_count+= 1
     scrapper = selenium_scrapper.selenium_driver(current_roll_number=roll_number , sleep=sleep)
     scrapper.check_rollnumber()
-    if current_count == 100:
-        for roll_number in loaded_rollnumber:
-            with open(save_file_name , 'a') as file : file.write(roll_number + "\n")
+    # if current_count == 100:
+    #     current_count = 0
+    #     for roll_number in loaded_rollnumber:
+    #         with open(save_file_name , 'a') as file : file.write(roll_number + "\n")
  
 
+def stopping_thread():
+    global current_working
+    current_working = False
 
 def second_thread_calling():
     global current_thread_value
     global sleep_value
     current_thread_value = int(browser_slider.get())
     sleep_value = int(sleep_slider.get())
+
+    global current_working
+    
+
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
+        futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(current_thread_value)]
+        total_futures = len(futures)
+            # Wait for all futures to complete
+        
+        if current_working == False:
+            print("Stopping Execution - Please close opened browsers")
+            return None
+    
+        for future in concurrent.futures.as_completed(futures):
+            total_futures -= 1
+            if total_futures == 0:
+                second_thread_calling()
     
 
 
 
 def thread_calling():
+
+    
+
+    global current_working
     file_loading() # File Loading for the roll number 
+
     global current_thread_value
     global sleep_value
 
     sleep_value = int(sleep_slider.get())
     current_thread_value = int(browser_slider.get())
 
+
+
+    # Calculating the currnet executing time for finding the rollnumber : 
+    global loaded_rollnumber
+
+    print("File checked for Browser :  Total Count is : ")
+    print(len(loaded_rollnumber))
+    print("Expected time to complete : " +  str(len(loaded_rollnumber) / 6) + " Minutes")
+    print("Expected time to complete : " +  str(len(loaded_rollnumber) / 360) + " Hours")
+    print("Expected time to complete : " +  str(len(loaded_rollnumber) / 8640) + " Days")
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
         futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(current_thread_value)]
+        total_futures = len(futures)
             # Wait for all futures to complete
+        
+        if current_working == False:
+            print("Stopping Execution - Please close opened browsers")
+            return None
+    
         for future in concurrent.futures.as_completed(futures):
-            print("All threads are completed")
-
+            total_futures -= 1
+            if total_futures == 0:
+                second_thread_calling()
 
         
 
@@ -146,7 +192,7 @@ save_file_text  = ctk.CTkEntry(main_window , placeholder_text="Enter Filename to
 # Make start and stop buttons : 
 
 start_scrapping  = ctk.CTkButton(main_window , text="Start Scrapping" , width=255 , command=thread_calling)
-stop_scrapping  = ctk.CTkButton(main_window , text="Stop Scrapping" , width  = 255)
+stop_scrapping  = ctk.CTkButton(main_window , text="Stop Scrapping" , width  = 255 , command=stopping_thread)
 
 
 progress_bar  =ctk.CTkProgressBar(main_window , orientation='horizontal' , width=530 , height=10)
