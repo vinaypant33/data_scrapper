@@ -1,4 +1,4 @@
-# data_scrapper
+# Data_scrapper - Tkinter,Selenium,Threadpool
 Data Scrapper - Result Scrapper Using Selenium
 
 # Result Scrapper
