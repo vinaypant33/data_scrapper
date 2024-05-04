@@ -9,7 +9,8 @@ from time import sleep
 import winsound
 import concurrent.futures # For threadpool 
 from tkinter import messagebox
-
+from tkinter import PhotoImage
+from tkinter import Image
 
 
 ## Setting up Constants  : 
@@ -52,7 +53,7 @@ def file_saving():
 
 def file_loading():
     
-    status_bar.configure(text="File Reading")
+    print("File Reading")
     current_filename = selected_file_text.get()
     readfile  = open(current_filename , 'r')
     line  = readfile.readline()
@@ -160,17 +161,29 @@ main_window  = ctk.CTk()
 ctk.set_appearance_mode("dark")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
-# --------
+# -------- Setting up the title and the icons for the main Image ---------------
 
-main_window.title("Web Scrapper")
+
+
+
+# icon_image = PhotoImage(file="icon.png")
+
+main_window.title(" Data Scrapper")
 
 # Maing the application in the center screen  : 
-height  = 230
+height  = 220
 width  = 550
 
+# main_window.iconphoto(True , icon_image)
 
-x_location  = (main_window.winfo_width() //2 ) + (width)
-y_location  = (main_window.winfo_height() // 2) + (height)
+main_window.iconbitmap('icon.ico')
+
+# main_window.tk.call('wm', 'iconphoto', main_window._w, icon_image)  # Make the icon 
+
+
+
+x_location  = (main_window.winfo_screenwidth() //2 ) + (width // 2)
+y_location  = (main_window.winfo_screenheight() // 2) + (height // 2)
 
 main_window.geometry(f"{width}x{height}+{x_location}+{y_location}")
 main_window.resizable(0 , 0)
@@ -199,7 +212,7 @@ stop_scrapping  = ctk.CTkButton(main_window , text="Stop Scrapping" , width  = 2
 progress_bar  =ctk.CTkProgressBar(main_window , orientation='horizontal' , width=530 , height=10)
 progress_bar.set(0.0)
 
-status_bar  = ctk.CTkLabel(main_window , text="Status : ")
+# status_bar  = ctk.CTkLabel(main_window , text="Status : ")
 
 
 
@@ -221,6 +234,6 @@ stop_scrapping.place(x= 280 , y  =145)
 
 
 progress_bar.place(x = 10 , y = 190)
-status_bar.place(x = 10 , y = 200)
+# status_bar.place(x = 10 , y = 200)
 
 main_window.mainloop()

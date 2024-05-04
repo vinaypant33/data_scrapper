@@ -28,7 +28,6 @@ class selenium_driver():
         self.driver.get("https://result.mdurtk.in/postexam/result.aspx")
 
     def check_rollnumber(self ):
-        print("Checking the roll number with "  + str(self.current_roll_numebr))
         if self.driver.title == "Maharshi Dayanand University, Rohtak":
             self.driver.find_element(By.ID , "txtRegistrationNo").send_keys(str(self.registration_number))
             self.driver.find_element(By.ID , "txtRollNo").send_keys(str(self.current_roll_numebr))
@@ -63,7 +62,6 @@ class selenium_driver():
             print( "Title Not Found Aborting Borwser")
         self.driver.close()
         self.driver.quit()
-        print("Quitting the browser")
         
 
 
