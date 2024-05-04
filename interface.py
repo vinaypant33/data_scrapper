@@ -132,9 +132,9 @@ def thread_calling():
 
     print("File checked for Browser :  Total Count is : ")
     print(len(loaded_rollnumber))
-    print("Expected time to complete : " +  str(len(loaded_rollnumber) / 6) + " Minutes")
-    print("Expected time to complete : " +  str(len(loaded_rollnumber) / 360) + " Hours")
-    print("Expected time to complete : " +  str(len(loaded_rollnumber) / 8640) + " Days")
+    print("Expected time to complete : " +  str((len(loaded_rollnumber) / 6) / current_thread_value) + " Minutes")
+    print("Expected time to complete : " +  str((len(loaded_rollnumber) / 360) / current_thread_value) + " Hours")
+    print("Expected time to complete : " +  str((len(loaded_rollnumber) / 8640) / current_thread_value) + " Days")
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=current_thread_value) as executor:
         futures = [executor.submit(scrapper_selenium, loaded_rollnumber.pop(0), sleep_value) for _ in range(current_thread_value)]
