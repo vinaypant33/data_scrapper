@@ -29,10 +29,10 @@ class selenium_driver():
         self.driver.get("https://result.mdurtk.in/postexam/result.aspx")
 
     def check_rollnumber(self ):
+
         if self.driver.title == "Maharshi Dayanand University, Rohtak":
             self.driver.find_element(By.ID , "txtRegistrationNo").send_keys(str(self.registration_number))
             self.driver.find_element(By.ID , "txtRollNo").send_keys(str(self.current_roll_numebr))
-            sleep(self.sleep)
             self.driver.find_element(By.ID , "cmdbtnProceed").click()
             sleep(self.sleep)
             try:
@@ -58,11 +58,13 @@ class selenium_driver():
 
             # This code will be done in another class in the main loop of the tkinter library which will run using the thread pool and / which to be controlled by the slider
             # with open('confirmed_rollnumber.txt', 'a') as file: file.write(each)
-        else:
+        elif self.driver.title == "Traffic Quota Control":
             winsound.Beep(self.nodes['C'] , self.duration)
-            print( "Title Not Found Aborting Borwser")
-            self.driver.close()
-            self.driver.quit()
+            with open("data_scrapper_log.txt" , 'a') as file : file.write("Traffic Quota Reached :" + str(self.current_roll_numebr))
+            sleep(20)
+            return "Traffic Quota Control"
+            # self.driver.close()
+            # self.driver.quit()
         
 
 

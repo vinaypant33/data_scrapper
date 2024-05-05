@@ -75,11 +75,12 @@ def scrapper_selenium(roll_number , sleep):
     global current_count
     current_count+= 1
     scrapper = selenium_scrapper.selenium_driver(current_roll_number=roll_number , sleep=sleep)
-    scrapper.check_rollnumber()
-    # if current_count == 100:
-    #     current_count = 0
-    #     for roll_number in loaded_rollnumber:
-    #         with open(save_file_name , 'a') as file : file.write(roll_number + "\n")
+    result  = scrapper.check_rollnumber()
+    if result  == "Working Roll Number Found":
+        winsound.Beep(2000 , 2000)
+    elif result == "Traffic Quota Control":
+        winsound.Beep(4000 , 3000)
+        messagebox.showinfo("Roll Number Found Check logs" )
  
 
 def stopping_thread():

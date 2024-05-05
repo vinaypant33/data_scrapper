@@ -1,0 +1,1 @@
+UI hangs when selenium based browser starts : UI to run to another thread
